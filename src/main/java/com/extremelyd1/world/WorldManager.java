@@ -38,18 +38,22 @@ public class WorldManager {
      */
     private PregenerationManager pregenerationManager;
 
-    public WorldManager(Game game) throws IllegalArgumentException {
+    public WorldManager(Game game, World world) throws IllegalArgumentException {
         this.game = game;
 
-        this.world = Bukkit.getWorld("world");
-        this.nether = Bukkit.getWorld("world_nether");
-        this.end = Bukkit.getWorld("world_the_end");
-
+        this.world = world;
         if (this.world == null) {
-            throw new IllegalArgumentException("There is no overworld named 'world' loaded, cannot start game");
+            throw new IllegalArgumentException("There is no overworld loaded, cannot start game");
         }
 
+        this.nether = Bukkit.getWorld(world.getName() + "_nether");
+        this.end = Bukkit.getWorld(world.getName() + "_the_end");        
+
         initialize();
+    }
+
+    public WorldManager(Game game) throws IllegalArgumentException {
+        this(game, Bukkit.getWorld("world"));
     }
 
     /**
@@ -263,6 +267,14 @@ public class WorldManager {
      */
     public Location getSpawnLocation() {
         return world.getSpawnLocation();
+    }
+
+    /**
+     * Gets the spawn location of the overworld
+     * @return The spawn location
+     */
+    public Location getSpawnLocation(World w) {
+        return w.getSpawnLocation();
     }
 
     public World getWorld() {
