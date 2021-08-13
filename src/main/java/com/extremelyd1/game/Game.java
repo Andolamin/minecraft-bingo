@@ -101,7 +101,7 @@ public class Game {
     /**
      * The world manager instance
      */
-    private final WorldManager worldManager;
+    private WorldManager worldManager;
     /**
      * Recipe util class instance
      */
@@ -138,8 +138,6 @@ public class Game {
         state = State.PRE_GAME;
 
         config = new Config(bingo);
-
-        worldManager = new WorldManager(this);
 
         gameBoardManager = new GameBoardManager(this);
         teamManager = new TeamManager(this);
@@ -235,6 +233,13 @@ public class Game {
      * @param player The player that started the game, or null if no player started the game
      */
     public void start(Player player) {
+
+        if (player == null) {
+            worldManager = new WorldManager(this);
+        } else {
+            worldManager = new WorldManager(this, player.getWorld());
+        }
+
         // Sanity checks
         if (teamManager.getNumActiveTeams() == 0) {
             getLogger().warning("No teams have been selected, cannot start game");
